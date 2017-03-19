@@ -21,6 +21,14 @@ posts = Post.all
   )
 end
 
+10.times do
+  Question.create!(
+    title: RandomData.random_sentence,
+    body: RandomData.random_paragraph,
+    resolved: false
+  )
+end
+
 puts "#{Post.count} posts created"
 Post.find_or_create_by(title: 'Penelope', body: 'Unique body')
 puts "#{Post.count} posts created"
@@ -28,3 +36,4 @@ puts "#{Post.count} posts created"
 puts "Seed finished"
 puts "#{Post.count} posts created"
 puts "#{Comment.count} comments created"
+puts "#{Question.count} questions created"
