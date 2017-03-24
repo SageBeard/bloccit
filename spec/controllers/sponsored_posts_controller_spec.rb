@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe SponsoredPostsController, type: :controller do
   let(:my_topic) { Topic.create!(name:  RandomData.random_sentence, description: RandomData.random_paragraph) }
-  let(:my_sponsored_post) { my_topic.sponsored_posts.create!(title: RandomData.random_sentence, body: RandomData.random_paragraph, price: RandomData.random_number) }
+  let(:my_sponsored_post) { my_topic.sponsored_posts.create!(title: RandomData.random_sentence, body: RandomData.random_paragraph, price: 0) }
 
   describe "GET show" do
       it "returns http success" do
@@ -17,26 +17,24 @@ RSpec.describe SponsoredPostsController, type: :controller do
 
       it "assigns my_sponsored_post to @sponsored_post" do
         get :show, topic_id: my_topic.id, id: my_sponsored_post.id
-        expect(assigns(:sponsored_post)).to eq(my_post)
+        expect(assigns(:sponsored_post)).to eq(my_sponsored_post)
       end
     end
 
-    describe "SPONSORED POST create" do
-    # #4
-      it "increases the number of Sponsored_Posts by 1" do
-        expect{post :create, topic_id: my_topic.id, post: {title: RandomData.random_sentence, body: RandomData.random_paragraph}}.to change(Post,:count).by(1)
+    describe "GET new" do
+      it "returns http success" do
+        get :new, topic_id: my_topic.id
+        expect(response).to have_http_status(:success)
       end
 
-    # #5
-      it "assigns the new sponsored post to @sponsored_post" do
-        post :create, topic_id: my_topic.id, post: {title: RandomData.random_sentence, body: RandomData.random_paragraph}
-        expect(assigns(:post)).to eq Post.last
+      it "renders the #new view" do
+        get :new, topic_id: my_topic.id
+        expect(response).to render_template :new
       end
 
-    # #6
-      it "redirects to the new post" do
-        post :create, topic_id: my_topic.id, post: {title: RandomData.random_sentence, body: RandomData.random_paragraph}
-        expect(response).to redirect_to [my_topic, Post.last]
+      it "instantiates @sponsored_post" do
+        get :new, topic_id: my_topic.id
+        expect(assigns(:sponsored_post)).not_to be_nil
       end
     end
 
@@ -48,18 +46,18 @@ RSpec.describe SponsoredPostsController, type: :controller do
       end
 
       it "renders the #edit view" do
-        get :edit, topic_id: my_topic.id, id: my_sponsoredpost.id
+        get :edit, topic_id: my_topic.id, id: my_sponsored_post.id
         expect(response).to render_template :edit
       end
 
-      it "assigns post to be updated to @sponsoredpost" do
-        get :edit, topic_id: my_topic.id, id: my_sponsoredpost.id
-        sponsoredpost_instance = assigns(:sponsoredpost)
+      it "assigns post to be updated to @sponsored_post" do
+        get :edit, topic_id: my_topic.id, id: my_sponsored_post.id
+        sponsored_post_instance = assigns(:sponsored_post)
 
-        expect(sponsoredpost_instance.id).to eq my_sponsoredpost.id
-        expect(sponsoredpost_instance.title).to eq my_sponsoredpost.title
-        expect(sponsoredpost_instance.body).to eq my_sponsoredpost.body
-        expect(sponsoredpost_instance.price).to eq my_sponsoredpost.price
+        expect(sponsored_post_instance.id).to eq my_sponsored_post.id
+        expect(sponsored_post_instance.title).to eq my_sponsored_post.title
+        expect(sponsored_post_instance.body).to eq my_sponsored_post.body
+        expect(sponsored_post_instance.price).to eq my_sponsored_post.price
       end
     end
 end
