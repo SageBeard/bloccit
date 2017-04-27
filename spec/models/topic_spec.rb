@@ -22,4 +22,6 @@ RSpec.describe Topic, type: :model do
     expect(topic.public).to be(true)
     end
   end
+
+  
 end
