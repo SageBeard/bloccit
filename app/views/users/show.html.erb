@@ -2,11 +2,10 @@
   <div class="col-md-8">
     <div class="media">
       <br />
-// #12
       <% avatar_url = @user.avatar_url(128) %>
       <% if avatar_url %>
         <div class="media-left">
-// #13
+
           <%= image_tag avatar_url, class: 'media-object' %>
         </div>
       <% end %>
@@ -20,10 +19,15 @@
     </div>
   </div>
 </div>
-
-// #14
-<h2>Posts</h2>
-<%= render @user.posts %>
-
-<h2>Comments</h2>
-<%= render @user.comments %>
+    <% if @user.posts.empty? %>
+      <p><%= @user.name %> has not submitted posts</p>
+    <% else %>
+      <%= render @user.posts %>
+      <%= render @user.favorite_for(post) %>
+      <%= time_ago_in_words(post.created_at) %> ago by <%= post.user.name %> <%= image_tag avatar_url, class: 'media-object' %><br>
+    <% end %>
+    <% if @user.comments.empty? %>
+      <p><%= @user.name %> has not submitted comments</p>
+    <% else %>
+      <%= render @user.comments %>
+    <% end %>
