@@ -115,10 +115,4 @@ RSpec.describe User, type: :model do
          expect(known_user.avatar_url(48)).to eq(expected_gravatar)
        end
      end
-
-     describe "attributes" do
-         it "has author and .avatar_url" do
-           expect(favorite_for(post)).to have_attributes(post: user.name, avatar_url: known_user.avatar_url)
-       end
-     end
   end
